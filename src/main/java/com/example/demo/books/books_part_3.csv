@@ -1,0 +1,11 @@
+book_id,title,author,genre,price,rating
+21,Book Title 21,Author 21,Non-Fiction,173.5,3.0
+22,Book Title 22,Author 22,Sci-Fi,177.0,3.5
+23,Book Title 23,Author 23,Fantasy,180.5,4.0
+24,Book Title 24,Author 24,Mystery,184.0,3.0
+25,Book Title 25,Author 25,Fiction,187.5,3.5
+26,Book Title 26,Author 26,Non-Fiction,191.0,4.0
+27,Book Title 27,Author 27,Sci-Fi,194.5,3.0
+28,Book Title 28,Author 28,Fantasy,198.0,3.5
+29,Book Title 29,Author 29,Mystery,201.5,4.0
+30,Book Title 30,Author 30,Fiction,205.0,3.0
