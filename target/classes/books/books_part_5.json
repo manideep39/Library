@@ -1,0 +1,12 @@
+[
+  { "book_id": 41, "title": "Book Title 41", "author": "Author 41", "genre": "Non-Fiction", "price": 243.5, "rating": 4.0 },
+  { "book_id": 42, "title": "Book Title 42", "author": "Author 42", "genre": "Sci-Fi", "price": 247.0, "rating": 3.0 },
+  { "book_id": 43, "title": "Book Title 43", "author": "Author 43", "genre": "Fantasy", "price": 250.5, "rating": 3.5 },
+  { "book_id": 44, "title": "Book Title 44", "author": "Author 44", "genre": "Mystery", "price": 254.0, "rating": 4.0 },
+  { "book_id": 45, "title": "Book Title 45", "author": "Author 45", "genre": "Fiction", "price": 257.5, "rating": 3.0 },
+  { "book_id": 46, "title": "Book Title 46", "author": "Author 46", "genre": "Non-Fiction", "price": 261.0, "rating": 3.5 },
+  { "book_id": 47, "title": "Book Title 47", "author": "Author 47", "genre": "Sci-Fi", "price": 264.5, "rating": 4.0},
+  { "book_id": 48, "title": "Book Title 48", "author": "Author 48", "genre": "Fantasy", "price": 268.0, "rating": 3.0 },
+  { "book_id": 49, "title": "Book Title 49", "author": "Author 49", "genre": "Mystery", "price": 271.5, "rating": 3.5 },
+  { "book_id": 50, "title": "Book Title 50", "author": "Author 50", "genre": "Fiction", "price": 275.0, "rating": 4.0 }
+]
