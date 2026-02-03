@@ -46,7 +46,7 @@ public class BookFactory {
 
 
     private static void requiredFieldsCheck(Map<String, String> input, Map<String, List<String>> errors) {
-        for (String field: REQUIRED_FIELDS) {
+        for (var field: REQUIRED_FIELDS) {
             if (!input.containsKey(field)) {
                 errors.putIfAbsent(field, new ArrayList<>());
                 errors.get(field).add(REQUIRED_FIELD_MISSING_ERROR);
@@ -55,8 +55,8 @@ public class BookFactory {
     }
 
     private static void fieldsDataTypeCheck(Map<String, String> input, Map<String, List<String>> errors) {
-        for (Map.Entry<String, String> entry: input.entrySet()) {
-            String field = entry.getKey();
+        for (var entry: input.entrySet()) {
+            var field = entry.getKey();
             Class<?> fieldType = FIELDS_DATA_TYPE.get(field);
 
             try {

@@ -22,8 +22,8 @@ public class BooksRepo {
     private final List<Book> books = new ArrayList<>();
 
     public void saveAll(List<Book> books) throws SQLException {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement pstmt = connection.prepareStatement(INSERT_BOOKS_QUERY)) {
+        try (var connection = dataSource.getConnection();
+             var pstmt = connection.prepareStatement(INSERT_BOOKS_QUERY)) {
             connection.setAutoCommit(false);
             for (Book book: books) {
                 pstmt.setLong(1, book.getBookId());
