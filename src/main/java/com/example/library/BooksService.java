@@ -1,6 +1,8 @@
 package com.example.library;
 
 import com.example.library.exception.BooksRepoException;
+import com.example.library.filereader.FileReader;
+import com.example.library.filereader.FileReaderResolver;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +19,11 @@ import java.util.stream.Stream;
 @Slf4j
 public class BooksService {
     private final BooksRepo booksRepo;
+    private final FileReaderResolver readerResolver;
 
-    public BooksService(BooksRepo booksRepo) {
+    public BooksService(BooksRepo booksRepo, FileReaderResolver readerResolver) {
         this.booksRepo = booksRepo;
+        this.readerResolver = readerResolver;
     }
 
     public void bulkImport(Path filePath) {
@@ -36,7 +40,8 @@ public class BooksService {
 
     private void importBookFile(Path filePath) {
         try {
-            List<Map<String, String>> rawBooksData = CustomFileReader.readFile(filePath);
+            FileReader reader = readerResolver.resolve(filePath);
+            List<Map<String, String>> rawBooksData = reader.read(filePath);
             List<Book> books = rawBooksData.stream()
                     .map(BookFactory::validateAndBuild)
                     .filter(Objects::nonNull)
