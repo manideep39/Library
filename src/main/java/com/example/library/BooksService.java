@@ -1,6 +1,5 @@
 package com.example.library;
 
-import com.example.library.exception.BookInputDataException;
 import com.example.library.exception.BooksRepoException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 @Service
@@ -37,9 +37,12 @@ public class BooksService {
     private void importBookFile(Path filePath) {
         try {
             List<Map<String, String>> rawBooksData = CustomFileReader.readFile(filePath);
-            List<Book> books = rawBooksData.stream().map(BookFactory::validateAndBuild).toList();
+            List<Book> books = rawBooksData.stream()
+                    .map(BookFactory::validateAndBuild)
+                    .filter(Objects::nonNull)
+                    .toList();
             booksRepo.saveAll(books);
-        } catch (UncheckedIOException | IllegalArgumentException | BookInputDataException  | BooksRepoException  e) {
+        } catch (UncheckedIOException | IllegalArgumentException | BooksRepoException  e) {
             log.error(e.getMessage());
         }
     }

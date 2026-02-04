@@ -1,6 +1,5 @@
 package com.example.library;
 
-import com.example.library.exception.BookInputDataException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -33,8 +32,10 @@ public class BookFactory {
         requiredFieldsCheck(input, errors);
         fieldsDataTypeCheck(input, errors);
 
-        if (!errors.isEmpty())
-            throw new BookInputDataException(errors);
+        if (!errors.isEmpty()) {
+            log.warn("Validation Failed: {}", errors);
+            return null;
+        }
 
         return new Book(
                 Long.parseLong(input.get("book_id")),
