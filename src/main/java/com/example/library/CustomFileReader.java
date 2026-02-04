@@ -1,11 +1,10 @@
 package com.example.library;
 
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.ObjectMapper;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
@@ -16,7 +15,7 @@ import java.util.stream.Stream;
 @Slf4j
 public class CustomFileReader {
     private static List<Map<String, String>> readJsonFile(Path path) {
-        ObjectMapper objectMapper = new ObjectMapper();
+        val objectMapper = new ObjectMapper();
         List<Map<String, String>> records = objectMapper.readValue(path, new TypeReference<>() {});
 
         long distinctRecordSizes = records.stream().mapToInt(Map::size).distinct().count();
@@ -27,8 +26,8 @@ public class CustomFileReader {
     }
 
     private static List<Map<String, String>> readCsvFile(Path path) {
-        var fileName = path.getFileName().toString();
-        var records = new ArrayList<Map<String, String>>();
+        val fileName = path.getFileName().toString();
+        val records = new ArrayList<Map<String, String>>();
 
         try (Stream<String> lines = Files.lines(path)) {
             Iterator<String> it = lines.iterator();
@@ -41,12 +40,12 @@ public class CustomFileReader {
                     .map(String::trim).toArray(String[]::new);
 
             it.forEachRemaining(line -> {
-                var columns = line.split(",", -1);
+                val columns = line.split(",", -1);
 
                 if (headers.length != columns.length)
                     log.warn("File: {}, header/column mismatch: {}", fileName, line);
 
-                var record = new HashMap<String, String>();
+                val record = new HashMap<String, String>();
                 for (int i = 0; i < headers.length; i++)
                     record.put(headers[i],  i >= columns.length ? null : columns[i].trim());
 
@@ -60,8 +59,8 @@ public class CustomFileReader {
     }
 
     public static List<Map<String, String>> readFile(Path path) {
-        String fileName = path.getFileName().toString();
-        String extension = fileName.substring(fileName.lastIndexOf('.'));
+        val fileName = path.getFileName().toString();
+        val extension = fileName.substring(fileName.lastIndexOf('.'));
         return switch (extension) {
             case ".json" -> readJsonFile(path);
             case ".csv" -> readCsvFile(path);

@@ -1,15 +1,14 @@
 package com.example.library;
 
+import com.example.library.exception.BookInputDataException;
+import com.example.library.exception.BooksRepoException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -23,28 +22,25 @@ public class BooksService {
         this.booksRepo = booksRepo;
     }
 
-    public void bulkImport(Path folderPath) throws IOException {
-        if (Files.isDirectory(folderPath)) {
-            try (Stream<Path> filePaths = Files.list(folderPath)) {
-                filePaths.forEach(filePath -> {
-                    var fileName = filePath.getFileName().toString();
-                    try {
-                        List<Map<String, String>> rawBooksData = CustomFileReader.readFile(filePath);
-                        List<Book> books = new ArrayList<>();
-                        rawBooksData.forEach(rawBookData -> {
-                            try {
-                                Book book = BookFactory.validateAndBuild(rawBookData);
-                                books.add(book);
-                            } catch (BookInputDataException e) {
-                                log.error("Book Input Data Exception in File: {}, Errors: {}", fileName, e.getErrors().toString());
-                            }
-                        });
-                        booksRepo.saveAll(books);
-                    } catch (UncheckedIOException | SQLException e) {
-                        log.error(e.getMessage());
-                    }
-                });
+    public void bulkImport(Path filePath) {
+        if (Files.isDirectory(filePath)) {
+            try (Stream<Path> filePaths = Files.list(filePath)) {
+                filePaths.forEach(this::importBookFile);
+            } catch (IOException e) {
+                log.error(e.getMessage());
             }
+        } else {
+            importBookFile(filePath);
+        }
+    }
+
+    private void importBookFile(Path filePath) {
+        try {
+            List<Map<String, String>> rawBooksData = CustomFileReader.readFile(filePath);
+            List<Book> books = rawBooksData.stream().map(BookFactory::validateAndBuild).toList();
+            booksRepo.saveAll(books);
+        } catch (UncheckedIOException | IllegalArgumentException | BookInputDataException  | BooksRepoException  e) {
+            log.error(e.getMessage());
         }
     }
 }

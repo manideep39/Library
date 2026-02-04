@@ -1,13 +1,11 @@
 package com.example.library;
 
+import lombok.val;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import java.io.File;
-import java.io.IOException;
 import java.nio.file.Paths;
-import java.sql.SQLException;
 
 @SpringBootApplication
 public class LibraryApplication implements CommandLineRunner {
@@ -22,8 +20,8 @@ public class LibraryApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws IOException {
-        var path = Paths.get("src/main/resources/books");
+    public void run(String... args) {
+        val path = Paths.get("src/main/resources/books");
         booksService.bulkImport(path);
     }
 }

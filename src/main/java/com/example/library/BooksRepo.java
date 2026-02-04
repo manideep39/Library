@@ -1,12 +1,12 @@
 package com.example.library;
 
+import com.example.library.exception.BooksRepoException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.val;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,26 +16,27 @@ import java.util.List;
 public class BooksRepo {
     private final DataSource dataSource;
 
-    private final String INSERT_BOOKS_QUERY = "INSERT INTO books (book_id,title,author,genre,price,rating) VALUES (?, ?, ?, ?, ?, ?)";
-
     @Getter
     private final List<Book> books = new ArrayList<>();
 
-    public void saveAll(List<Book> books) throws SQLException {
-        try (var connection = dataSource.getConnection();
-             var pstmt = connection.prepareStatement(INSERT_BOOKS_QUERY)) {
+    public void saveAll(List<Book> books) {
+        val INSERT_BOOKS_QUERY = "INSERT INTO books (book_id,title,author,genre,price,rating) VALUES (?, ?, ?, ?, ?, ?)";
+        try (val connection = dataSource.getConnection();
+             val stmt = connection.prepareStatement(INSERT_BOOKS_QUERY)) {
             connection.setAutoCommit(false);
-            for (Book book: books) {
-                pstmt.setLong(1, book.getBookId());
-                pstmt.setString(2, book.getTitle());
-                pstmt.setString(3, book.getAuthor());
-                pstmt.setString(4, book.getGenre());
-                pstmt.setBigDecimal(5, book.getPrice());
-                pstmt.setDouble(6, book.getRating());
-                pstmt.addBatch();
+            for (val book: books) {
+                stmt.setLong(1, book.getBookId());
+                stmt.setString(2, book.getTitle());
+                stmt.setString(3, book.getAuthor());
+                stmt.setString(4, book.getGenre());
+                stmt.setBigDecimal(5, book.getPrice());
+                stmt.setDouble(6, book.getRating());
+                stmt.addBatch();
             }
-            pstmt.executeBatch();
+            stmt.executeBatch();
             connection.commit();
+        } catch (SQLException e) {
+            throw new BooksRepoException("Failed to save " + books.size() + " books");
         }
     }
 }

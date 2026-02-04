@@ -1,7 +1,9 @@
 package com.example.library;
 
+import com.example.library.exception.BookInputDataException;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import lombok.val;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -26,7 +28,7 @@ public class BookFactory {
     );
 
     public static Book validateAndBuild(Map<String, String> input) {
-        Map<String, List<String>> errors = new HashMap<>();
+        val errors = new HashMap<String, List<String>>();
 
         requiredFieldsCheck(input, errors);
         fieldsDataTypeCheck(input, errors);
@@ -46,7 +48,7 @@ public class BookFactory {
 
 
     private static void requiredFieldsCheck(Map<String, String> input, Map<String, List<String>> errors) {
-        for (var field: REQUIRED_FIELDS) {
+        for (val field: REQUIRED_FIELDS) {
             if (!input.containsKey(field)) {
                 errors.putIfAbsent(field, new ArrayList<>());
                 errors.get(field).add(REQUIRED_FIELD_MISSING_ERROR);
@@ -55,8 +57,8 @@ public class BookFactory {
     }
 
     private static void fieldsDataTypeCheck(Map<String, String> input, Map<String, List<String>> errors) {
-        for (var entry: input.entrySet()) {
-            var field = entry.getKey();
+        for (val entry: input.entrySet()) {
+            val field = entry.getKey();
             Class<?> fieldType = FIELDS_DATA_TYPE.get(field);
 
             try {

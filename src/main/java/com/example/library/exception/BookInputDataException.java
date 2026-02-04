@@ -1,4 +1,4 @@
-package com.example.library;
+package com.example.library.exception;
 
 import lombok.Getter;
 
@@ -7,9 +7,7 @@ import java.util.Map;
 
 @Getter
 public class BookInputDataException extends RuntimeException {
-    private final Map<String, List<String>> errors;
-
     public BookInputDataException(Map<String, List<String>> errors) {
-        this.errors = errors;
+        super(errors.toString());
     }
 }
