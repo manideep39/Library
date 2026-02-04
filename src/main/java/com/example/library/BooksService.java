@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -41,12 +39,10 @@ public class BooksService {
     private void importBookFile(Path filePath) {
         try {
             FileReader reader = readerResolver.resolve(filePath);
-            List<Map<String, String>> rawBooksData = reader.read(filePath);
-            List<Book> books = rawBooksData.stream()
+            reader.read(filePath)
                     .map(BookFactory::validateAndBuild)
                     .filter(Objects::nonNull)
-                    .toList();
-            booksRepo.saveAll(books);
+                    .forEach(booksRepo::save);
         } catch (UncheckedIOException | IllegalArgumentException | BooksRepoException  e) {
             log.error(e.getMessage());
         }
