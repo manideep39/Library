@@ -1,10 +1,10 @@
 package com.example.library.filereader;
 
 import java.nio.file.Path;
-import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public interface FileReader {
     boolean supports(Path path);
-    List<Map<String, String>> read(Path path);
+    Stream<Map<String, String>> read(Path path);
 }
