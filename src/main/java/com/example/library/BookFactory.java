@@ -38,7 +38,7 @@ public class BookFactory {
         }
 
         return new Book(
-                Long.parseLong(input.get("book_id")),
+                null,
                 input.get("title"),
                 input.get("author"),
                 input.get("genre"),
