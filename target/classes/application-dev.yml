@@ -1,3 +1,23 @@
+spring:
+  liquibase:
+    enabled: true
+
+  docker:
+    compose:
+      lifecycle-management: start-and-stop
+
 logging:
   level:
-    root: DEBUG
+    org.springframework:
+        jdbc: TRACE
+
+
+    org:
+      springframework:
+        jdbc=DEBUG:
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+

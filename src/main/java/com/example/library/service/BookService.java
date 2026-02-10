@@ -1,8 +1,11 @@
-package com.example.library;
+package com.example.library.service;
 
+import com.example.library.Book;
+import com.example.library.BookFactory;
 import com.example.library.exception.BooksRepoException;
 import com.example.library.filereader.FileReader;
 import com.example.library.filereader.FileReaderResolver;
+import com.example.library.repository.BookRepo;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.springframework.stereotype.Service;
@@ -11,22 +14,24 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 @Service
 @Slf4j
-public class BooksService {
-    private final BooksRepo booksRepo;
+public class BookService {
+    private final BookRepo bookRepo;
     private final FileReaderResolver readerResolver;
     private final int BOOKS_BUFFER_SIZE = 5;
 
-    public BooksService(BooksRepo booksRepo, FileReaderResolver readerResolver) {
-        this.booksRepo = booksRepo;
+    public BookService(BookRepo bookRepo, FileReaderResolver readerResolver) {
+        this.bookRepo = bookRepo;
         this.readerResolver = readerResolver;
+    }
+
+    public Book getBookById(long bookId) {
+        return bookRepo.findById(bookId)
+                .orElseThrow(() -> new IllegalArgumentException("Not a valid bookId"));
     }
 
     public void bulkImport(Path filePath) {
@@ -65,7 +70,7 @@ public class BooksService {
         if (batch.isEmpty())
             return;
 
-        booksRepo.saveAll(batch);
+        bookRepo.saveAll(batch);
         batch.clear();
     }
 }
